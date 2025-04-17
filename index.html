@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>连接WiFi前请观看视频</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    video {
+      width: 100%;
+      max-width: 600px;
+    }
+    .qr-container {
+      display: none;
+      margin-top: 20px;
+    }
+    .qr-container img {
+      width: 220px;
+    }
+    .tip {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h2>请先观看完整视频以获取WiFi连接二维码</h2>
+  <video id="wifiVideo" controls>
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    您的浏览器不支持视频播放。
+  </video>
+
+  <div class="qr-container" id="qrCode">
+    <h3>✅ 视频已观看完毕，请扫码连接 WiFi</h3>
+    <img src="wifi_qr.png" alt="WiFi QR Code">
+    <div class="tip">支持 iOS / Android 系统扫码自动连接</div>
+  </div>
+
+  <script>
+    const video = document.getElementById("wifiVideo");
+    const qr = document.getElementById("qrCode");
+    video.addEventListener("ended", () => {
+      qr.style.display = "block";
+    });
+  </script>
+</body>
+</html>
