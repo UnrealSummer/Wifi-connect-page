@@ -3,105 +3,43 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WiFi 连接页面</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WiFi 视频连接页</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    video {
-      max-width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    #qrcode-container {
-      display: none;
-      margin-top: 20px;
-      text-align: center;
-    }
-    canvas {
-      margin-bottom: 10px;
-    }
-    .admin-info {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #666;
-    }
-    button {
-      padding: 8px 12px;
-      border: none;
-      background-color: #0088cc;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    #qr { display: none; margin-top: 20px; }
+    video { max-width: 100%; }
   </style>
 </head>
 <body>
+  <h1>请观看视频后获取WiFi二维码</h1>
   <video id="video" controls autoplay>
     <source src="sample.mp4" type="video/mp4">
     您的浏览器不支持视频播放。
   </video>
 
-  <div id="qrcode-container">
-    <h3>扫码连接 WiFi</h3>
-    <div id="qrcode"></div>
-    <button onclick="saveQRCode()">保存二维码</button>
-    <div id="admin" class="admin-info">页面访问次数：<span id="visit-count">加载中...</span></div>
+  <div id="qr">
+    <h2>WiFi二维码</h2>
+    <img src="wifi-qr.png" alt="WiFi QR Code" width="200"/>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <p id="visit-counter">页面访问次数：加载中...</p>
+
   <script>
     const video = document.getElementById('video');
-    const qrContainer = document.getElementById('qrcode-container');
-    const visitCount = document.getElementById('visit-count');
-    const adminBox = document.getElementById('admin');
+    const qr = document.getElementById('qr');
+    video.onended = () => {
+      qr.style.display = 'block';
+    };
 
-    const isAdmin = new URLSearchParams(location.search).get('admin') === '1';
-    if (!isAdmin) adminBox.style.display = 'none';
-
-    fetch('https://wifi-visit.zhangyu19930703.workers.dev/count' + (isAdmin ? '?admin=1' : ''))
+    const isAdmin = location.search.includes('admin=1');
+    fetch('https://visit.zhangyu19930703.workers.dev/?site=wifi-page' + (isAdmin ? '&admin=1' : ''))
       .then(res => res.json())
       .then(data => {
-        if (data.success && data.show && isAdmin) {
-          visitCount.textContent = data.count;
-        } else {
-          visitCount.textContent = isAdmin ? '0' : '';
-        }
-      }).catch(() => {
-        visitCount.textContent = '加载失败';
-      });
-
-    video.addEventListener('ended', () => {
-      qrContainer.style.display = 'block';
-      generateQRCode();
-    });
-
-    function generateQRCode() {
-      const wifiInfo = 'WIFI:T:WPA;S:Office-yingxiong;P:onlyyingxiong01;;';
-      QRCode.toCanvas(document.createElement('canvas'), wifiInfo, { width: 200 }, (err, canvas) => {
-        if (!err) {
-          const qrcodeDiv = document.getElementById('qrcode');
-          qrcodeDiv.innerHTML = '';
-          qrcodeDiv.appendChild(canvas);
+        if (data.show) {
+          document.getElementById('visit-counter').innerText = '页面访问次数：' + data.count;
         }
       });
-    }
-
-    function saveQRCode() {
-      const canvas = document.querySelector('#qrcode canvas');
-      const a = document.createElement('a');
-      a.href = canvas.toDataURL();
-      a.download = 'wifi_qrcode.png';
-      a.click();
-    }
   </script>
 </body>
 </html>
