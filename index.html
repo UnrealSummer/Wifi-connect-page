@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WiFi 视频连接页</title>
+  <title>WiFi 视频连接页（含访问统计）</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 20px; }
     #qr { display: none; margin-top: 20px; }
@@ -23,23 +23,24 @@
     <img src="wifi-qr.png" alt="WiFi QR Code" width="200"/>
   </div>
 
-  <p id="visit-counter">页面访问次数：加载中...</p>
+  <!-- 管理员可见的访问统计 -->
+  <div id="admin-stats" style="display: none; margin-top: 20px;">
+    本页面访问量：<span id="busuanzi_value_page_pv">加载中...</span> 次
+  </div>
 
+  <!-- 加载 busuanzi -->
+  <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <!-- 判断是否管理员 -->
   <script>
     const video = document.getElementById('video');
     const qr = document.getElementById('qr');
     video.onended = () => {
       qr.style.display = 'block';
     };
-
-    const isAdmin = location.search.includes('admin=1');
-    fetch('https://visit.zhangyu19930703.workers.dev/?site=wifi-page' + (isAdmin ? '&admin=1' : ''))
-      .then(res => res.json())
-      .then(data => {
-        if (data.show) {
-          document.getElementById('visit-counter').innerText = '页面访问次数：' + data.count;
-        }
-      });
+    if (location.search.includes("admin=1")) {
+      document.getElementById("admin-stats").style.display = "block";
+    }
   </script>
 </body>
 </html>
