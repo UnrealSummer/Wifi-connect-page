@@ -1,46 +1,33 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WiFi 视频连接页（含访问统计）</title>
+  <meta charset="UTF-8">
+  <title>WiFi Connect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 20px; }
-    #qr { display: none; margin-top: 20px; }
-    video { max-width: 100%; }
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
-  <h1>请观看视频后获取WiFi二维码</h1>
-  <video id="video" controls autoplay>
+  <video id="video" autoplay muted playsinline>
     <source src="sample.mp4" type="video/mp4">
-    您的浏览器不支持视频播放。
+    您的浏览器不支持HTML5视频。
   </video>
 
-  <div id="qr">
-    <h2>WiFi二维码</h2>
-    <img src="wifi-qr.png" alt="WiFi QR Code" width="200"/>
-  </div>
-
-  <!-- 管理员可见的访问统计 -->
-  <div id="admin-stats" style="display: none; margin-top: 20px;">
-    本页面访问量：<span id="busuanzi_value_page_pv">加载中...</span> 次
-  </div>
-
-  <!-- 加载 busuanzi -->
-  <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  <!-- 判断是否管理员 -->
-  <script>
-    const video = document.getElementById('video');
-    const qr = document.getElementById('qr');
-    video.onended = () => {
-      qr.style.display = 'block';
-    };
-    if (location.search.includes("admin=1")) {
-      document.getElementById("admin-stats").style.display = "block";
-    }
-  </script>
+  <!-- Cloudflare Web Analytics 统计脚本 -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "81f6f3ab8f1f4e15a2a62adabcccf79c"}'></script>
 </body>
 </html>
