@@ -16,18 +16,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
+      background-color: #000;
+      color: #fff;
       margin: 0;
-      background: black;
+      font-family: Arial, sans-serif;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
       overflow: hidden;
     }
-    #video {
+    video {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    #qr-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
     }
     #qrImage  {
       display: none;
@@ -43,21 +51,19 @@
     您的浏览器不支持视频播放。
   </video>
 
-  <div id="qrImage">
-    <h2>WiFi二维码</h2>
-    <img src="wifi-qr7.png" alt="WiFi QR Code" width="200"/>
+  <div id="qr-container">
+    <p>视频已播放完毕，扫描下方二维码连接 WiFi：</p>
+    <img src="wifi-qr7.png" alt="WiFi QR Code" />
   </div>
 
   <script>
     const video = document.getElementById('video');
-    const qrImage = document.getElementById('qrImage');
+    const qrContainer = document.getElementById('qr-container');
 
-    video.addEventListener('ended', () => {
-      // 隐藏视频
+    video.onended = () => {
       video.style.display = 'none';
-      // 显示二维码图片
-      qrImage.style.display = 'block';
-    });
+      qrContainer.style.display = 'flex';
+    };
   </script>
 </body>
 </html>
