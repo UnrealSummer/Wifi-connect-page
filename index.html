@@ -73,6 +73,18 @@
       pageTitle.style.display = 'none';    // 隐藏标题
       qrContainer.style.display = 'flex';  // 显示二维码
     };
+
+    // 兼容微信自动播放
+    document.addEventListener('WeixinJSBridgeReady', function () {
+      video.play();
+    }, false);
+
+  // 兼容一般浏览器
+  document.addEventListener('DOMContentLoaded', function() {
+    video.play().catch(function(error){
+      console.log('自动播放失败，需要用户操作:', error);
+    });
+  });
   </script>
 </body>
 </html>
