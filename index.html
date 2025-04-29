@@ -63,25 +63,49 @@
     <img src="wifi-qr7.png" alt="WiFi QR Code" />
   </div>
 
+  <div id="wifi-info">
+    <p>WiFi 名称：<strong>Fortune 7/7号小院</strong></p>
+    <p>WiFi 密码：<strong id="wifi-pass">77777777</strong></p>
+    <button class="copy-btn" onclick="copyPassword()">复制密码</button>
+  </div>
+
   <script>
     const video = document.getElementById('video');
     const qrContainer = document.getElementById('qr-container');
     const pageTitle = document.getElementById('page-title');
+    const wifiInfo = document.getElementById('wifi-info');
+
+    function isWeChatBrowser() {
+      return /MicroMessenger/i.test(navigator.userAgent);
+    }
 
     video.onended = () => {
       video.style.display = 'none';        // 隐藏视频
       pageTitle.style.display = 'none';    // 隐藏标题
       qrContainer.style.display = 'flex';  // 显示二维码
+
+      if (isWeChatBrowser()) {
+        wifiInfo.style.display = 'flex';
+      } else {
+        qrContainer.style.display = 'flex';
+      }
     };
+
+    function copyPassword() {
+      const password = document.getElementById('wifi-pass').innerText;
+      navigator.clipboard.writeText(password).then(() => {
+        alert('密码已复制');
+      });
+    }
 
     // 兼容微信自动播放
     document.addEventListener('WeixinJSBridgeReady', function () {
       video.play();
     }, false);
 
-  // 兼容一般浏览器
-  document.addEventListener('DOMContentLoaded', function() {
-    video.play().catch(function(error){
+    // 兼容一般浏览器
+    document.addEventListener('DOMContentLoaded', function() {
+      video.play().catch(function(error){
       console.log('自动播放失败，需要用户操作:', error);
     });
   });
