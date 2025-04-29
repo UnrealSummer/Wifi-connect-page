@@ -37,7 +37,7 @@
       object-fit: contain;
       border-radius: 10px;
     }
-    #qr-container {
+    #qr-container, #wifi-info {
       display: none;
       flex-direction: column;
       align-items: center;
@@ -82,12 +82,11 @@
     video.onended = () => {
       video.style.display = 'none';        // 隐藏视频
       pageTitle.style.display = 'none';    // 隐藏标题
-      qrContainer.style.display = 'flex';  // 显示二维码
 
       if (isWeChatBrowser()) {
-        wifiInfo.style.display = 'flex';
+        wifiInfo.style.display = 'flex'; // 显示复制密码
       } else {
-        qrContainer.style.display = 'flex';
+        qrContainer.style.display = 'flex'; // 显示二维码
       }
     };
 
